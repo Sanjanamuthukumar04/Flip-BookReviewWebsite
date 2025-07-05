@@ -9,33 +9,47 @@ export default function BookDetails() {
   const [book, setBook] = useState(null);
   const [reviews, setReviews] = useState([]);
 
+  // Load book info and saved reviews from localStorage on mount or id change
   useEffect(() => {
     fetch(`https://www.googleapis.com/books/v1/volumes/${id}`)
       .then(res => res.json())
       .then(data => {
         setBook(data);
 
-        let fakeReviews = [];
-        if (id === 'a86lCgAAQBAJ') {
-          fakeReviews = [
-            { user: 'manic_pinecone', text: 'The best book I have ever read and will probably ever read. Every line is poetry. Whenever I felt numb, I read this book to feel something, and feel I did. I think everyone should read this atleast once in their life.', rating: 5, likes: 7 },
-            { user: 'Bob', text: 'Evocative writing.', rating: 4.0, likes: 5 },
-          ];
-        } else if (id === 'KS-cEAAAQBAJ') {
-          fakeReviews = [
-            { user: 'manic_pinecone', text: 'I read this book over a year ago. The fig-tree analogy continues to haunt me on random nights. Sylvia Plath is one of the most expressive writers of her generation. It is very sad that (SPOILER ALERT) while Esther Greenwood escaped the bell jar, Sylvia never did.', rating: 5.0, likes: 8 },
-            { user: 'Dave', text: 'Too slow-paced for me', rating: 2.0, likes: 3 },
-          ];
-        } else if (id === 'ifn3EAAAQBAJ') {
-          fakeReviews = [
-            { user: 'manic_pinecone', text: 'This has to be Sally Rooney\'s best novel so far. Her writing style has evolved so beautifully and it is evident in the text. The switching POV is very well done. I especially enjoyed Peter\'s curt and cynical tone in contrast to Ivan\'s anxious and rambling manner of speech. A book on shared grief and how it affects two brother\'s lives and their relationships. A must read!', rating: 4.5, likes: 6 },
-            { user: 'Frank', text: 'Deeply moving.', rating: 4.0, likes: 4 },
-          ];
+        // Try to load saved reviews from localStorage first
+        const savedReviews = localStorage.getItem(`reviews_${id}`);
+        if (savedReviews) {
+          setReviews(JSON.parse(savedReviews));
+        } else {
+          // Fallback to your fakeReviews if no saved reviews found
+          let fakeReviews = [];
+          if (id === 'a86lCgAAQBAJ') {
+            fakeReviews = [
+              { user: 'manic_pinecone', text: 'The best book I have ever read and will probably ever read. Every line is poetry. Whenever I felt numb, I read this book to feel something, and feel I did. I think everyone should read this atleast once in their life.', rating: 5, likes: 7 },
+              { user: 'Bob', text: 'Evocative writing.', rating: 4.0, likes: 5 },
+            ];
+          } else if (id === 'KS-cEAAAQBAJ') {
+            fakeReviews = [
+              { user: 'manic_pinecone', text: 'I read this book over a year ago. The fig-tree analogy continues to haunt me on random nights. Sylvia Plath is one of the most expressive writers of her generation. It is very sad that (SPOILER ALERT) while Esther Greenwood escaped the bell jar, Sylvia never did.', rating: 5.0, likes: 8 },
+              { user: 'Dave', text: 'Too slow-paced for me', rating: 2.0, likes: 3 },
+            ];
+          } else if (id === 'ifn3EAAAQBAJ') {
+            fakeReviews = [
+              { user: 'manic_pinecone', text: 'This has to be Sally Rooney\'s best novel so far. Her writing style has evolved so beautifully and it is evident in the text. The switching POV is very well done. I especially enjoyed Peter\'s curt and cynical tone in contrast to Ivan\'s anxious and rambling manner of speech. A book on shared grief and how it affects two brother\'s lives and their relationships. A must read!', rating: 4.5, likes: 6 },
+              { user: 'Frank', text: 'Deeply moving.', rating: 4.0, likes: 4 },
+            ];
+          }
+          setReviews(fakeReviews);
         }
-
-        setReviews(fakeReviews);
       });
   }, [id]);
+
+  // Save reviews to localStorage whenever they change
+  useEffect(() => {
+    if (reviews.length > 0) {
+      localStorage.setItem(`reviews_${id}`, JSON.stringify(reviews));
+    }
+  }, [reviews, id]);
 
   const handleAddReview = (newReview) => {
     if (reviews.some((r) => r.user === 'You')) {
@@ -88,12 +102,11 @@ export default function BookDetails() {
           display: 'flex',
           justifyContent: 'center'
         }}>
-                <img
-        src={info.imageLinks?.thumbnail}
-        alt={info.title}
-        className="book-details-image"
-        />
-
+          <img
+            src={info.imageLinks?.thumbnail}
+            alt={info.title}
+            className="book-details-image"
+          />
         </div>
 
         <div style={{ flex: 1, textAlign: 'left' }}>
