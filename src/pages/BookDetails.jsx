@@ -87,35 +87,36 @@ export default function BookDetails() {
       margin: '0 auto',
       fontFamily: 'sans-serif'
     }}>
-      <h1 style={{ fontSize: '2.5rem', marginBottom: '10px' }}>{info.title}</h1>
-      <p style={{ color: '#666', marginBottom: '30px' }}>{info.authors?.join(', ')}</p>
+      <h1 style={{ fontSize: '2.5rem', marginBottom: '10px', textAlign: 'center' }}>
+        {info.title}
+      </h1>
+      <p style={{ color: '#666', marginBottom: '30px', textAlign: 'center' }}>
+        {info.authors?.join(', ')}
+      </p>
 
       <div style={{
         display: 'flex',
-        gap: '30px',
+        flexDirection: 'column',
+        gap: '20px',
         marginBottom: '30px',
-        alignItems: 'flex-start'
+        alignItems: 'center',
+        textAlign: 'center'
       }}>
-        <div style={{
-          flexShrink: 0,
-          maxWidth: '220px',
-          display: 'flex',
-          justifyContent: 'center'
-        }}>
-          <img
-            src={info.imageLinks?.thumbnail}
-            alt={info.title}
-            className="book-details-image"
-          />
-        </div>
+        <img
+          src={info.imageLinks?.thumbnail}
+          alt={info.title}
+          className="book-details-image"
+          style={{ maxWidth: '220px', width: '100%', height: 'auto', borderRadius: '6px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}
+        />
 
-        <div style={{ flex: 1, textAlign: 'left' }}>
+        <div style={{ maxWidth: '600px', textAlign: 'center' }}>
           <Rating value={randomRating} count={randomCount} />
           <div
             style={{
               marginTop: '20px',
               lineHeight: '1.6',
               color: '#444',
+              textAlign: 'left'
             }}
             dangerouslySetInnerHTML={{
               __html: info.description || 'No description available.',
