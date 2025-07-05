@@ -14,7 +14,7 @@ A simple React-based web application where users can browse books, view details,
 - Responsive and clean UI
 
 ## 🚀 Live Demo
-Deployed on Vercel:_ [https://your-vercel-link-here](https://your-vercel-link-here)  
+[live demo](https://flip-book-review-website-bn2e.vercel.app/)  
 
 ## 🧰 Tech Stack
 - React
